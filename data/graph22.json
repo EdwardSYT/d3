@@ -1,0 +1,48 @@
+{
+ "name": "绵阳中医医院",
+ "children": [
+  {
+   "name": "39健康网",
+   "num":3,
+   "children": [
+    {
+     "name": "儿科",
+	 "num":14,
+     "children": [
+      {"name": "的味道", "size": 500},
+      {"name": "奋斗", "size": 500},
+      {"name": "广告", "size": 500},
+	  {"name": "盐田港", "size": 500},
+	  {"name": "听得到", "size": 500},
+	  {"name": "严铤", "size": 500},
+	  {"name": "搞清楚", "size": 500},
+	  {"name": "建国后", "size": 500},
+	  {"name": "揉揉", "size": 500},
+	  {"name": "仍然", "size": 500},
+	  {"name": "而入吧", "size": 500},
+	  {"name": "影热风", "size": 500},
+	  {"name": "俄文", "size": 500},
+      {"name": "特维尔", "size": 500,"children": [{"name": "的味道", "size": 500}]}
+     ]
+    },
+    {
+     "name": "内科",
+	 "num":5,
+     "children": [
+      {"name": "唐婷婷", "size": 500},
+      {"name": "的我", "size": 500},
+      {"name": "广告", "size": 500},
+      {"name": "过放电", "size": 500},
+      {"name": "对的", "size": 500}
+     ]
+    },
+    {
+     "name": "眼科",
+     "children": [
+      {"name": "娃儿", "size": 500}
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>气泡图1</title>
+<meta name="Generator" content="EditPlus">
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+
+
+
+
+<!-- 
+<script src='https://touzi.sina.com.cn/view/public/js/common.js?id=20160708102080'></script> --
+<script src="https://ssl-finance.sina.com.cn/xdemo/touziyi/js/circleForceMore.js" charset="gbk"></script>
+<script src="https://ssl-finance.sina.com.cn/xdemo/js/touziyi2/circleforce.js" charset="gbk"></script>
+<script src="https://ssl-finance.sina.com.cn/xdemo/touziyi/js/stockHotChart.js" charset="gbk"></script>
+<script src="https://touzi.sina.com.cn/view/public/js/theme/index.js?id=20160708102080"></script>
+<script src="https://touzi.sina.com.cn/view/public/js/pageload.js"></script> --
+<script type="text/javascript" src='https://ssl-finance.sina.com.cn/sinafinancesdk/js/sf_sdk.js'></script>  --
+<script src="https://ns.sinaimg.cn/finance/tzy/js/jq.js" charset="utf-8"></script> --
+-->
+        <script src="jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="d3/d3.v3.min.js"></script>
+<script type="text/javascript">
+//此处为点击页面打开的链接
+new fChart({conc_url:"http://baidu.com",
+            stock_url:"http://sina.com",w:1500,h:600}).init();
+//构图
+function force(option_){
+
+    var width=option_.w,//848,
+        height=option_.h,//560,
+        padding=3,
+        clusterPadding=30,
+        maxRadius=50,
+        riseColor='#EC4E4B',
+        fallColor='#00AE66',
+        zeroColor='#969696';
+    var n=60,
+        m=6;
+    //每个群集父节点
+    var parentNodes = new Array(m);
+
+    var color = d3.scale.category10().domain(d3.range(m));
+
+    function creatA(n_,m_){
+        var arr=[],a=0;
+
+        for(var i=0;i<n_;i++){
+            if(i%m_==0 && i!=0)a++;
+
+            arr.push(a);
+        }
+
+        return arr;
+    }
+
+    var b= creatA(n,m);
+    var c=0;
+    var nodes = d3.range(n).map(function() {
+        var i = b[c],//Math.floor(Math.random() * m),
+            r = (c%m)==0 ? 45:10;//Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius;
+        var d = {
+            cluster: i,
+            radius: r,
+            name:'a',
+            zf:'0',
+            x: Math.cos(i / m * 2 * Math.PI) * 500 + width/2 + Math.random(),
+            y: Math.sin(i / m * 2 * Math.PI) * 500 + height/2  + Math.random()
+        };
+        if (!parentNodes[i] || (r > parentNodes[i].radius)) parentNodes[i] = d;
+        c++;
+        return d;
+    });
+
+    var node;
+    var clickStatus=0;
+    var chuc=0;
+    function _init(){
+        var force = d3.layout.force().nodes(nodes)
+                    .size([width,height])  
+                    .gravity(0)
+                    //.linkStrength(0) 
+                    .charge(0);
+
+        var svg = d3.select("#chart-svg").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+        //var drag = force.drag().on("dragstart", dragstart);
+        var dragend = force.drag().on("dragend", dragendX)
+                                    .on('dragstart', dragstart);
+
+        var offsetX=0,offsetY=0;
+        function dragendX(){
+            offsetX-=d3.event.sourceEvent.x;
+            offsetY-=d3.event.sourceEvent.y;
+
+            offsetX=Math.abs(offsetX);
+            offsetY=Math.abs(offsetY);
+        }
+
+        function dragstart(){
+            offsetX=d3.event.sourceEvent.x;
+            offsetY=d3.event.sourceEvent.y;
+        }
+        //构建图表和数字
+        node = svg.selectAll('g')
+                .data(nodes)
+                .enter().append("g")
+                .style('cursor','pointer')
+                .on('click',function(d){
+                    var url;
+                    //根据半径确定是个股气泡还是题材气泡
+                    if(d.radius<45){//个股
+                        url=option_.conc_url+d.stockCode;
+                    }else{//题材
+                        url=option_.stock_url+d.concUniCode;
+                    }
+                    window.open(url);
+                });
+
+        node.append('circle')
+            .style("fill",function(d){
+                if(d.radius>55) d.radius=44;
+                var c='#ffffff';
+                if(d.zf>0 && d.radius<45)c=riseColor;
+                if(d.zf<0 && d.radius<45)c=fallColor;
+                if(d.zf==0&& d.radius<45)c=zeroColor;
+                return c;
+            })
+            .style('stroke',function(d){
+                var c=riseColor;
+                if(d.zf>0) c=riseColor;
+                if(d.zf<0) c=fallColor;
+                if(d.zf==0)c=zeroColor;
+                return c;
+            });
+
+        node.append('text')
+            .attr('alignment-baseline','middle')
+            .attr('text-anchor','middle')
+            .text(function(d){
+                return d.name;
+            })
+            .style('font-size',function(d){
+                var size='12px';
+                if(d.radius>45)size='12px';
+                return size;
+            })
+            .style('fill',function(d){
+                var c='#ffffff';
+                if(d.radius>45 && d.zf>0) c=riseColor;
+                if(d.radius>45 && d.zf<=0) c=fallColor;
+                if(d.radius>45 && d.zf==0) c=zeroColor;
+                if(d.radius<45 && d.zf==0) c=zeroColor;
+                return c;
+            })
+            .attr('x',function(d){
+                if(this.getComputedTextLength()>d.radius*2 && d.radius<45){
+
+                    var top=d.name.substring(0,2);
+                    var bot=d.name.substring(2,d.name.length);
+
+                    d3.select(this).text(function(){return '';});
+
+                    d3.select(this).append('tspan')
+                        .attr('x',0)
+                        .attr('y',-5)
+                        .text(function(){return top;});
+
+                    d3.select(this).append('tspan')
+                        .attr('x',0)
+                        .attr('y',10)
+                        .text(function(){return bot;});
+                    return '';
+                }
+            });
+
+        node.transition()
+            .duration(750)
+            //.delay(function(d, i) { return i * 5; })
+            .select('circle').attrTween("r", function(d) {
+                var i = d3.interpolate(0, d.radius);
+                return function(t) { return d.radius = i(t);
+            };
+        });
+
+        force.on('tick',_tick).start();
+        force.on('end',function(){
+            clickStatus=1;
+            chuc=1;
+        });
+    }
+
+    function _update(){
+        //d3.select("#chart-svg").remove();
+        document.getElementById('chart-svg').innerHTML='';
+        node=null;
+
+        _init();
+    }
+
+    function _tick(e){
+
+        var alpha=50 * e.alpha * e.alpha;
+        node.each(function(d){
+            var cluster = parentNodes[d.cluster];
+            // For cluster nodes, apply custom gravity.
+            if (cluster === d) return;
+
+            if(chuc==0){
+                var bab=(d.cluster%2 == 0)? 1:2;
+                var cac= d.cluster>4 ? d.cluster-5:d.cluster;
+
+                cluster.x=cac*option_.w*9/48 + 160;
+                cluster.y=bab*option_.h/3; 
+            }
+
+            var x = d.x - cluster.x,
+                y = d.y - cluster.y,
+                l = Math.sqrt(x * x + y * y),
+                r = d.radius + cluster.radius;
+            if (l != r) {
+                l = (l - r) / l * alpha;
+                d.x -= x *= l;
+                d.y -= y *= l;
+                cluster.x += x;
+                cluster.y += y;
+            }
+        })
+        .each(function(d){
+            var quadtree = d3.geom.quadtree(nodes);
+            var alpha2=0.5;
+
+            var r = d.radius + 50 + clusterPadding,
+                nx1 = d.x - r,
+                nx2 = d.x + r,
+                ny1 = d.y - r,
+                ny2 = d.y + r;
+
+            quadtree.visit(function(quad, x1, y1, x2, y2) {
+                if (quad.point && (quad.point !== d)) {
+                    var x = d.x - quad.point.x,
+                        y = d.y - quad.point.y,
+                        l = Math.sqrt(x * x + y * y),
+                        r = d.radius + quad.point.radius + (d.cluster === quad.point.cluster ? padding : clusterPadding);
+                    if (l < r) {
+                        l = (l - r) / l * alpha2;
+                        d.x -= x *= l;
+                        d.y -= y *= l;
+                        quad.point.x += x;
+                        quad.point.y += y;
+                    }
+                }
+                return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+            });
+        })
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+        .select('circle')
+        .attr('r',  function(d) { if(d.name==' ')return 0;return d.radius; });
+    }
+
+    this.nodes=nodes;
+    this.init=_init;
+    this.update=_update;
+}
+
+//处理数据
+function fChart(option_){
+
+    var _chart=new force(option_);//填充图表数据
+    
+
+
+    function _update(){
+       _init(true);
+    }
+
+    function _init(update_){
+        //加载题材列表
+        $.post("data/3.json",null,function(fdata){
+            //此处是因为中心气泡的排列规则并未按照数据的顺序，因此在此处写死
+            var array=[0,36,12,48,24,30,6,42,18,54];
+            for(var i=0;i<10;i++){
+                var concInfo=fdata.dataObj[i];
+                var x1=array[i];
+                _chart.nodes[x1].name   =concInfo.name;
+                _chart.nodes[x1].zf     =concInfo.zf;
+                _chart.nodes[x1].concUniCode=concInfo.code;
+                _chart.nodes[x1].radius=55; //50 + 50 * Math.abs(concInfo.zf)/100 || 5;
+                /*绝对值大于10则圆圈显示固定大小
+                if(Math.abs(concInfo.zf)>10){
+                    _chart.nodes[i*6].radius= 50 + 50 * Math.abs(10)/100 || 5;
+                }*/
+                //_chart.nodes[i*6].stockNum=concInfo.num;//个股个数,暂时用不到
+                //var j=0;
+                //i*6-- 0,6,12,18,24,30,36,42,48,54  0,0,K=0;K<5;k++ 1,2,3,4,5 | 1,6 k=5;k<10;k++ 6,7,8,9,10  | 2 k=10;k<15;k++
+                //k=i*5;k<i*5+5;k++ 
+               console.log(concInfo.name+"--"+x1);
+               var y=x1;       
+               for(var k=i*5;k<i*5+5;k++){
+                   y++;
+                   /*
+                   if(k%5 == 0){
+                       j++;
+                   }*/
+                   var stockInfo=fdata.dataObj1[k];
+                   //console.log(stockInfo.name+"--"+y);
+                   //console.log(stockInfo);
+                   _chart.nodes[y].name  = stockInfo.name;
+                   _chart.nodes[y].zf    = stockInfo.zf;
+                   _chart.nodes[y].stockCode= stockInfo.code;
+                   _chart.nodes[y].radius=44;// 20 + Math.abs(stockInfo.zf) * 200 || 10;
+                   /*绝对值大于10则圆圈显示固定大小
+                   if(Math.abs(stockInfo.zf)>10){
+                       _chart.nodes[y].radius= 20 + Math.abs(10) * 200 || 10;
+                   }*/
+                   
+               }
+               
+            }
+            console.log(_chart);
+            update_?_chart.update():_chart.init();
+        },"json");
+    
+    }
+
+    this.init=_init;
+    this.update=_update;
+}
+
+</script>
+
+
+</head>
+
+<body>
+    <div id="chart-svg" style="position: relative; font-family: 'Microsoft Yahei', Arial, sans-serif '">
+        
+    </div>
+    
+    <div id="chartpopupsk"
+        style="position: absolute; color: rgb(255, 255, 255); font-family: 'Microsoft Yahei', Arial, sans-serif; font-size: 12px; min-width: 185px; height: 60px; display: none; left: 388.212px; top: 635.789px; background-color: rgba(62, 62, 62, 0.8);">
+        <div style="float: left; padding: 10px 0 0 10px;">
+            <div id="chartpopup_name" style="font-size: 14px; border-right: 1px solid #aaa; padding: 0 5px 0 0;">个股名称暂无</div>
+            <div id="chartpopup_code" style="text-align: center; border-right: 1px solid #aaa; padding: 0 5px 0 0;">个股编码暂无</div>
+        </div>
+        <div style="padding: 10px 10px 0 0; float: right;">
+            <div id="chartpopup_price"
+                style="text-align: right; font-size: 14px;">价格暂无</div>
+            <div style="text-align: right;">
+                <span id="chartpopup_zde" style="color: rgb(241, 18, 0);">数字1暂无</span>
+                <span id="chartpopup_zdf" style="color: rgb(241, 18, 0);">数字2暂无</span>
+            </div>
+        </div>
+    </div>
+
+    <!--  
+    <div id="chartpopupzt"
+        style="position: absolute; color: rgb(255, 255, 255); font-family: 'Microsoft Yahei', Arial, sans-serif; font-size: 14px; min-width: 150px; height: 70px; display: none; padding: 5px 10px 10px; left: 887.245px; top: 527.972px; background-color: rgba(62, 62, 62, 0.8);">
+        <div>
+            <div id="chartpopup_zt_name"
+                style="text-align: center; font-size: 16px; padding: 5px;">概念名称暂无</div>
+            <div>
+                股票涨幅<span id="chartpopup_zt_zf"
+                    style="color: rgb(241, 18, 0);">涨幅暂无</span>
+            </div>
+            <div>
+                股票个数<span id="chartpopup_zt_nm">股票个数暂无</span>
+            </div>
+        </div>
+    </div>-->
+</body>
+</html>

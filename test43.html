@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  .link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
+  }
+
+  #licensing {
+    fill: green;
+  }
+
+  .link.licensing {
+    stroke: green;
+  }
+
+  .link.resolved {
+    stroke-dasharray: 0,2 1;
+  }
+
+  circle {
+    fill: #ccc;
+    stroke: #333;
+    stroke-width: 1.5px;
+  }
+
+  text {
+    font: 12px Microsoft YaHei;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  }
+
+  .linetext {
+    font-size: 12px Microsoft YaHei;
+  }
+
+  #btn1 {
+    position:absolute;
+    left:25%;
+    top:10%;
+  }
+</style>
+<body>
+<button id="btn1">显示/隐藏</button>
+<button id="btn2">刷新</button>
+<div id="a" style="width:800px;height:600px;float:left;border:solid 1px #a0ffff;"></div>
+<script src="jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="d3/d3.v3.min.js"></script>
+<script>
+
+$("#btn1").on("click", function() {
+  $(".t123").toggle();
+})
+$("#btn2").on("click", function() {
+  selectTree();
+})
+
+var datas = {
+  "nodes": [// 1电话 2车牌号 3微信 4QQ 5姓名 6身份证 
+    {"name":"510878390578763910","group":6,"selected":true},
+    {"name":"13800138000","group":1,"selected":false},
+    {"name":"川A395395","group":2,"selected":false},
+    {"name":"ggrtds4353","group":3,"selected":false},
+    {"name":"126346788","group":4,"selected":false},
+    {"name":"张三","group":5,"selected":false},
+    {"name":"51087839057876391X","group":6,"selected":false},
+    {"name":"13546677898","group":1,"selected":false},
+    {"name":"wwe32341","group":3,"selected":false}
+  ],
+  "links": [
+    {"source": "510878390578763910", "target": "13800138000", "rela":"电话"},
+    {"source": "510878390578763910", "target": "川A395395", "rela":"车牌号"},
+    {"source": "510878390578763910", "target": "ggrtds4353", "rela":"微信"},
+    {"source": "510878390578763910", "target": "126346788", "rela":"QQ"},
+    {"source": "510878390578763910", "target": "张三", "rela":"姓名"},
+    {"source": "13800138000", "target": "126346788", "rela":"QQ"},
+    {"source": "13800138000", "target": "川A395395", "rela":"车牌号"},
+    {"source": "张三", "target": "51087839057876391X", "rela":"身份证号"},
+    {"source": "51087839057876391X", "target": "13546677898", "rela":"电话"},
+    {"source": "13546677898", "target": "wwe32341", "rela":"微信"},
+    {"source": "wwe32341", "target": "ggrtds4353", "rela":"微信"},
+    {"source": "ggrtds4353", "target": "wwe32341", "rela":"微信"},
+    {"source": "51087839057876391X", "target": "ggrtds4353", "rela":"微信"}
+  ]
+}
+function d3_Tree2(data) {
+
+  var groups = data.nodes;
+  var links = data.links;
+  var nodes = {};
+
+  links.forEach(function(link) {
+    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    console.log(nodes[link.source]);
+  });
+
+  groups.forEach(function(group) {
+    nodes[group.name].group = group.group;
+    nodes[group.name].selected = group.selected;
+  });
+
+}
+function selectTree() {
+  d3_Tree2(JSON.parse(JSON.stringify(datas)));
+}
+</script>

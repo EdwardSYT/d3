@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  #btn1 {
+    position:absolute;
+    left:25%;
+    top:10%;
+  }
+</style>
+<body>
+<script src="jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="d3/d3.v3.min.js"></script>
+<script>
+// 在 body 中插入一個 svg
+  var svg = d3.select('body').append('svg');
+ 
+  // 在 svg 中插入一個 path
+  svg.append('path').attr({
+    d: 'M50 150Q300 50 300 150T450 150'
+  }).style({
+    fill: 'none', 
+    stroke: 'purple',
+    'stroke-width': 15
+  })
+  .on("click", function() {
+    alert();
+  });
+</script>

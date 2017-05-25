@@ -1,0 +1,32 @@
+{
+  "nodes": [
+    {"id": "电话号码", "group": 1, "selected":false},
+    {"id": "电话", "group": 2, "selected":false},
+    {"id": "人物信息", "group": 3, "selected":false},
+    {"id": "姓名", "group": 5, "selected":false},
+    {"id": "住址", "group": 5, "selected":false},
+    {"id": "身份证号", "group": 5, "selected":false},
+    {"id": "IMSI", "group": 4, "selected":false},
+    {"id": "IMEI", "group": 4, "selected":false},
+    {"id": "MAC", "group": 4, "selected":false},
+    {"id": "3221341233413", "group": 6, "selected":false},
+    {"id": "6345656345255", "group": 6, "selected":true},
+    {"id": "5674687658568", "group": 6, "selected":false}
+  ],
+  "links": [
+    {"source": "电话号码", "target": "电话"},
+    {"source": "人物信息", "target": "电话"},
+    {"source": "人物信息", "target": "姓名"},
+    {"source": "人物信息", "target": "住址"},
+    {"source": "人物信息", "target": "身份证号"},
+    {"source": "电话号码", "target": "IMSI"},
+    {"source": "电话号码", "target": "IMEI"},
+    {"source": "电话号码", "target": "MAC"},
+    {"source": "MAC", "target": "3221341233413"},
+    {"source": "MAC", "target": "6345656345255"},
+    {"source": "MAC", "target": "5674687658568"},
+    {"source": "6345656345255", "target": "5674687658568"},
+    {"source": "5674687658568", "target": "IMEI"},
+    {"source": "5674687658568", "target": "电话号码"}
+  ]
+}

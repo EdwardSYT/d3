@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+  /*opacity:0.7;*/
+}
+    
+.textl text {
+  text-shadow: 1px 1px 10px #23cc47;
+  /*font: 12px sans-serif;
+  pointer-events: none;
+  text-anchor: middle;
+  <!--font-family:STCaiyun;.attr("opacity", "0.5")
+  font-size:120;-->*/
+}
+
+</style>
+<svg width="960" height="600"></svg>
+<script src="d3/d3.v4.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+var simulation = d3.forceSimulation()//力学模仿图
+    .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(function(d) { return 50; }))
+    .force("collision", d3.forceCollide(50))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+d3.json("data/data3.json", function(error, graph) {
+  if (error) throw error;
+
+  var link = svg.append("g")
+      .attr("class", "links")
+      .selectAll("line")
+      .data(graph.links)
+      .enter().append("line")
+      .attr("stroke-width", 1);
+
+  var node = svg.append("g")
+      .attr("class", "nodes")
+      .selectAll("rect")
+      .data(graph.nodes)
+      .enter().append("circle")
+      .attr("r", 20)
+      .attr("fill", function(d) { 
+        if(d.selected) {
+          return "#e02525";
+        }
+        return color(d.group); 
+      })
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  node.append("title")
+      .text(function(d) { return d.id; });
+
+
+
+  var textl = svg.append("g")
+      .attr("class", "textl")
+      .selectAll(".textl")
+      .data(graph.nodes)
+      .enter().append("text") 
+        // .attr("dx",-25)  
+        // .attr("dy",40)  
+      .attr("dy", ".35em")
+      // .attr("fill", "#6e7992")
+      .style("font-size", 15)
+      .attr("transform", function(d) { 
+        return "translate(-30,-9)"; 
+      }) 
+      .text(function(d) { return d.id; })
+      .on("click", click)
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+
+  simulation
+      .nodes(graph.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(graph.links);
+
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+
+    textl
+        .attr("x", function(d) { return d.x+10; })
+        .attr("y", function(d) { return d.y+10; });
+  }
+});
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+function click(d) {
+  console.log(d);
+}
+
+</script>

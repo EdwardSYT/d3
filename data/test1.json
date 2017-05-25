@@ -1,0 +1,30 @@
+{
+  "nodes": [
+    {"name":"510878390578763910","group":6,"selected":true},
+    {"name":"13800138000","group":1,"selected":false},
+    {"name":"川A395395","group":2,"selected":false},
+    {"name":"ggrtds4353","group":3,"selected":false},
+    {"name":"126346788","group":4,"selected":false},
+    {"name":"张三","group":5,"selected":false},
+    {"name":"51087839057876391X","group":6,"selected":false},
+    {"name":"13546677898","group":1,"selected":false},
+    {"name":"wwe32341","group":3,"selected":false},
+    {"name":"wwe32341111","group":3,"selected":false}
+  ],
+  "links": [
+    {"source": "510878390578763910", "target": "13800138000", "rela":"手机号码"},
+    {"source": "510878390578763910", "target": "川A395395", "rela":"车牌号码"},
+    {"source": "510878390578763910", "target": "ggrtds4353", "rela":"微信号码"},
+    {"source": "510878390578763910", "target": "126346788", "rela":"QQ号码"},
+    {"source": "510878390578763910", "target": "张三", "rela":"姓名"},
+    {"source": "13800138000", "target": "126346788", "rela":"QQ号码"},
+    {"source": "13800138000", "target": "川A395395", "rela":"车牌号码"},
+    {"source": "张三", "target": "51087839057876391X", "rela":"身份证号"},
+    {"source": "51087839057876391X", "target": "13546677898", "rela":"手机号码"},
+    {"source": "13546677898", "target": "wwe32341", "rela":"微信号码"},
+    {"source": "510878390578763910", "target": "wwe32341111", "rela":"微信号码"},
+    {"source": "wwe32341", "target": "ggrtds4353", "rela":"微信号码"},
+    {"source": "ggrtds4353", "target": "wwe32341", "rela":"微信号码"},
+    {"source": "51087839057876391X", "target": "ggrtds4353", "rela":"微信"}
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "key":1,
+  "name": "人物信息",
+  "storey":1,
+  "group":14,
+  "children": [
+    {
+      "key":2,
+      "name": "电话信息",
+      "selected":1,
+      "storey":2,
+      "group":1,
+      "children": [
+        {
+          "key":3,
+          "name": "IMIS",
+          "storey":3,
+          "group":10,
+          "children": [
+            {
+              "key":4,
+              "name": "QQ",
+              "selected":1,
+              "storey":4,
+              "group":4,
+              "children": [
+              ]
+            },
+            {
+              "key":14,
+              "name": "微信",
+              "selected":0,
+              "storey":4,
+              "group":3,
+              "children": [
+              ]
+            }
+          ]
+        },
+        {
+          "key":15,
+          "name": "MAC",
+          "selected":1,
+          "storey":3,
+          "group":11,
+          "children": [
+          ]
+        }
+      ]
+    },
+    {
+      "key":16,
+      "name": "身份证号",
+      "selected":1,
+      "storey":2,
+      "group":6,
+      "children": [
+      ]
+    },
+    {
+      "key":26,
+      "name": "姓名",
+      "selected":1,
+      "storey":2,
+      "group":5,
+      "children": [
+      ]
+    },
+    {
+      "key":36,
+      "name": "车辆信息",
+      "selected":1,
+      "storey":2,
+      "group":15,
+      "children": [
+        {
+          "key":37,
+          "name": " 车牌号",
+          "selected":1,
+          "storey":3,
+          "group":2,
+          "children": [
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>关系图</title>
+		<script src="jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="d3/d3.v3.min.js"></script>
+	</head>
+	<style>
+		.node circle {
+		  cursor: pointer;
+		  stroke: #3182bd;
+		  stroke-width: 0.5px;  
+		  opacity:0.7;
+		}
+		
+		.node text {
+		  font: 12px sans-serif;
+		  pointer-events: none;
+		  text-anchor: middle;
+		  <!--font-family:STCaiyun;.attr("opacity", "0.5")
+		  font-size:120;-->
+		}
+		
+		line.link {
+		  fill: none;
+		  stroke: #EEEEEE;
+		}
+	</style>
+	<body>输入框
+		<div id="history">查看历史：</div>
+		<div id="a" style="width:740px;height:740px;float:left;border:solid 1px #a0ffff;"></div>
+	</body>
+	<script type="text/javascript">
+	function jdtd3(){
+		$("#a").empty();
+		var width = 740,
+			height = 740,
+			dragEvent = 0,
+			root;
+		var force = d3.layout.force()
+			.linkDistance(80)
+			.charge(-120)
+			.gravity(.05)
+			.size([width, height])
+			.on("tick", tick);
+		//$("#a").empty();
+		var svg = d3.select("#a").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.call( // <-A
+                d3.behavior.zoom() // <-B
+                    .scaleExtent([-1, 10]) // <-C
+                    .on("zoom", zoom) // <-D
+            ).append("g");
+		var link = svg.selectAll(".link"),//连接线
+			node = svg.selectAll(".node");//节点
+			//image1 = svg.selectAll(".image");//图片
+		d3.json("data/graph22.json", function(error, json) {
+		  root = json;
+		  update();
+		});
+		function zoom() {
+			if(dragEvent!=2){
+				svg.attr("transform", "translate(" 
+		            + d3.event.translate 
+		            + ")scale(" + d3.event.scale + ")");
+			}
+	    }
+
+		function update() {
+		  var nodes = flatten(root),
+			  links = d3.layout.tree().links(nodes);
+
+		  // Restart the force layout.
+		  force
+			  .nodes(nodes)
+			  .links(links)
+			  .start();
+
+		  // Update links.
+		  link = link.data(links, function(d) { return d.target.id; });
+
+		  link.exit().remove();
+
+		  link.enter().insert("line", ".node")
+			  .attr("class", "link")
+			  .style("stroke-width",function(d){
+					//if(d.source.num==20){
+						//alert(d.source.num);
+						return d.target.num+2.3;
+					//}else{
+						//return 2.3;
+					//}
+			  });//stroke-width:20 大小
+
+		  // Update nodes.
+		  node = node.data(nodes, function(d) { return d.id; });
+
+		  node.exit().remove();
+
+		  var drag = force.drag()
+					.on("dragstart",function(d,i){//拖拽开始
+						dragEvent=1;
+						//$("#history").append(dragEvent);
+						d.fixed = true;    //拖拽开始后设定被拖拽对象为固定
+					})
+					.on("dragend",function(d,i){//拖拽结束
+						dragEvent=0;
+						//$("#history").append(dragEvent);
+					})
+					.on("drag",function(d,i){//拖拽
+						dragEvent=2;
+						//$("#history").append(dragEvent);
+					});
+		  var nodeEnter = node.enter().append("g")
+			  .attr("class", "node")
+			  .on("click", click)
+			  .call(drag);
+		  nodeEnter.append("circle")
+			  .attr("r", function(d) { return Math.sqrt(d.size) / 3 || 13.5; });
+		  nodeEnter.append("text")
+			  .attr("dy", ".35em")
+			  .text(function(d) { return d.name; }).style("fill", textColor).style("font-weight",fontWeight);//粗细 font-weight="bold"
+		  //11解答问题数图片	  
+		  nodeEnter.append("image")
+			.attr("width",15)
+			.attr("height",15)
+			.attr("transform", function(d) { 
+				return "translate(-30,8)"; 
+			})
+			.attr("xlink:href",function(d){
+				if(typeof(d.children)=="undefined"&&typeof(d._children)=="undefined"){
+					return "images/gif03.gif";
+				}
+			 });
+		  //11解答问题数
+		  nodeEnter.append("text")
+			  .attr("dy", ".35em")
+			  .style("fill", "#436EEE")
+			  .attr("transform", function(d) { 
+					return "translate(-5,17)"; 
+			  })
+			  .text(function(d) { return d.size; });
+		  //22点赞数图片
+		  nodeEnter.append("image")
+			.attr("width",15)
+			.attr("height",15)
+			.attr("transform", function(d) { 
+				return "translate(10,9)"; 
+			})
+			.attr("xlink:href",function(d){
+				if(typeof(d.children)=="undefined"&&typeof(d._children)=="undefined"){
+					return "images/gif07.gif";
+				}
+			 });
+		  //22点赞数
+		  nodeEnter.append("text")
+			  .attr("dy", ".35em")
+			  .style("fill", "green")
+			  .attr("transform", function(d) { 
+					return "translate(36,17)"; 
+			  })
+			  .text(function(d) { return d.size; });
+
+		  node.select("circle")
+			  .style("fill", color);    
+		}
+		//拖动更改坐标位置
+		function tick() {
+		  link.attr("x1", function(d) { return d.source.x; })
+			  .attr("y1", function(d) { return d.source.y; })
+			  .attr("x2", function(d) { return d.target.x; })
+			  .attr("y2", function(d) { return d.target.y; });
+		  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		}
+		//主节点判别 修改字体为粗体
+		function fontWeight(d){
+			if(d.name.indexOf("医院") > 0 ){
+				return "bold";
+			}
+		}
+		//主节点判别 修改字体颜色
+		function textColor(d){
+			if(d.name.indexOf("医院") > 0 ){
+				return "orange";
+			}
+		}
+		
+		//颜色变更
+		function color(d) {
+			if(d.name.indexOf("医院") > 0 ){
+				return "red";
+			}
+		  return d._children ? "yellow" // collapsed package
+			  : d.children ? "#436EEE" // expanded package
+			  : "#0099CC"; // leaf node
+		}
+
+		// 点击事件
+		function click(d) {
+		  if(typeof(d.children)=="undefined"&&typeof(d._children)=="undefined"){
+			overclick(d);
+		  }else{
+			  if (d3.event.defaultPrevented) return; // ignore drag
+			  if (d.children) {
+				d._children = d.children;
+				d.children = null;
+			  } else {
+				d.children = d._children;
+				d._children = null;
+			  }
+		  }
+		  update();
+		}
+		//点击事件 最后一层
+		function overclick(d){
+			//alert(d.name);
+			$("#history").append("<a href='#' onclick='jdtd3();' style='text-decoration:none;'>"+d.name+"</a>>");
+			
+			jdtd3();
+		}
+		
+		// Returns a list of all nodes under the root.
+		function flatten(root) {
+		  var nodes = [], i = 0;
+		  function recurse(node) {
+			if (node.children) node.children.forEach(recurse);
+			if (!node.id) node.id = ++i;
+			nodes.push(node);
+		  }
+		  recurse(root);
+		  return nodes;
+		}
+	}
+	jdtd3();
+	</script>
+</html> 
