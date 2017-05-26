@@ -33,7 +33,7 @@
                         obj.children = data;
                         update();
                     })
-                },
+                }, 
                 function(d) {// 点击最后一层事件
                     console.log(d);
                     $.get("data/data2.json?key="+JSON.stringify(d), function(data) {
