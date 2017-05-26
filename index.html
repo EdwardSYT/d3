@@ -4,43 +4,15 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>d3_Tree</title>
-        <script src="jquery-1.11.2.min.js"></script>
-        <script type="text/javascript" src="d3/d3.v3.min.js"></script>
-        <script type="text/javascript" src="d3_Tree.js"></script>
-<style>
-  #btn1 {
-    position:absolute;
-    left:25%;
-    top:10%;
-  }
-</style>
     </head>
-    <body><button id="btn1">显示/隐藏</button>
-        <div id="a" style="width:800px;height:600px;float:left;border:solid 1px #a0ffff;"></div>
+    <body>
+    <a href="test.html">test.html</a>
+    <a href="test2.html">test2.html</a>
+    <a href="test3.html">test3.html</a>
+    <a href="test4.html">test4.html</a>
+    <a href="test41.html">tes41.html</a>
+    <a href="test42.html">test42.html</a>
+    <a href="test43.html">test43.html</a>
+    <a href="test5.html">test5.html</a>
     </body>
-    <script type="text/javascript">
-    $("#btn1").on("click", function() {
-      $(".t123").toggle();
-    })
-        $.get("data/data2.json", function(data) {
-            d3_Tree(
-                "a",// 页面id
-                data,// 第一次获取数据
-                // JSON.parse(data),// 第一次获取数据
-                function(obj,update) {// 异步数据，此方法会循环各个节点
-                    $.get("data/data2_children.json?key="+obj.key, function(data) {
-                        // obj.children = JSON.parse(data);
-                        obj.children = data;
-                        update();
-                    })
-                },
-                function(d) {// 点击最后一层事件
-                    console.log(d);
-                    $.get("data/data2.json?key="+JSON.stringify(d), function(data) {
-                        console.log(data);
-                    })
-                }
-            ); 
-        })
-    </script>
 </html> 
