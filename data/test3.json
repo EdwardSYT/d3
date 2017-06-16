@@ -1,0 +1,13 @@
+{
+    "nodes":[
+        {"name":"13890213545", "group": 0},
+        {"name":"张三", "group": 1},
+        {"name":"王五", "group": 1},
+        {"name":"小李", "group": 1}
+    ],
+    "links":[
+        {"source":"13890213545","target":"张三","table_field":"DUMP_SDP_MZGA_BUSI_CYZS_POP_BASIC-XING_MING;DUMP_SDP_MZGA_BUSI_CYZS_CRIMI_BASIC-FAN_REN_XING_MING"},
+        {"source":"13890213545","target":"王五","table_field":"DUMP_SDP_MZGA_BUSI_CYZS_OBSERVER-ZUI_FAN_XING_MING"},
+        {"source":"13890213545","target":"小李","table_field":"ODS_SDP_MZGA_BUSI_WIFI_ONOFFLINE-JI_ZHU_XING_MING"}    
+    ]
+}
