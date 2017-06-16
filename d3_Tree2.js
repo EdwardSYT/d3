@@ -153,7 +153,13 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
       })
       // .style("pointer-events", "none")
       .style("stroke-width", 2) //线条粗细
-      .attr("marker-end", "url(#resolved)"); //根据箭头标记的id号标记箭头
+      .attr("marker-end", function(line) { //根据箭头标记的id号标记箭头 "url(#resolved)"
+        if(force.links().length > 1) {
+          return "url(#resolved)";
+        }else {
+          return "";
+        }
+      });
 
     edges_line.on("click",function(line) {
         //单击时让连接线加粗

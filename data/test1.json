@@ -24,7 +24,6 @@
     {"source": "13546677898", "target": "wwe32341", "rela":"微信号码"},
     {"source": "510878390578763910", "target": "wwe32341111", "rela":"微信号码"},
     {"source": "wwe32341", "target": "ggrtds4353", "rela":"微信号码"},
-    {"source": "ggrtds4353", "target": "wwe32341", "rela":"微信号码"},
     {"source": "51087839057876391X", "target": "ggrtds4353", "rela":"微信"}
   ]
 }
