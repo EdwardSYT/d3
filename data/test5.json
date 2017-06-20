@@ -1,0 +1,23 @@
+{
+  "nodes": [
+    {"name":"王伟","group":5,"selected":false},
+
+    {"name":"案件A","group":2,"selected":false},
+    {"name":"案件B","group":2,"selected":false},
+    {"name":"案件C","group":2,"selected":false},
+
+    {"name":"周瑜","group":4,"selected":false},
+    {"name":"李密","group":4,"selected":false},
+    {"name":"王宇","group":4,"selected":false},
+    {"name":"王华","group":4,"selected":false}
+  ],
+  "links": [
+    {"source": "王伟", "target": "案件A", "rela":""},
+    {"source": "王伟", "target": "案件B", "rela":""},
+    {"source": "王伟", "target": "案件C", "rela":""},
+    {"source": "案件A", "target": "周瑜", "rela":""},
+    {"source": "案件A", "target": "李密", "rela":""},
+    {"source": "案件B", "target": "王宇", "rela":""},
+    {"source": "案件C", "target": "王华", "rela":""}
+  ]
+}

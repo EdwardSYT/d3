@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  #btn1 {
+    position:absolute;
+    left:25%;
+    top:10%;
+  }
+</style>
+<body>
+<div id="a" style="width:800px;height:600px;float:left;border:solid 1px #a0ffff;"></div>
+<script src="jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="d3/d3.v3.min.js"></script>
+<script type="text/javascript" src="test425.js"></script>
+<script>
+
+  // 1电话 2车牌号 3微信 4QQ 5姓名 6身份证 
+  // 7住址 8邮箱 9IMEI 10IMSI 11MAC 12护照 13微博  JSON.parse(JSON.stringify(datas))
+var datas;
+function selectTree() {
+  if(typeof datas == "undefined") {
+    $.get("data/test425.json?name=510790198010218790&group=6", function(data) {
+      // datas = JSON.parse(data);
+      datas = data;
+      showTree();
+    })
+  }else {
+    showTree();
+  }
+}
+selectTree();
+
+function showTree() {
+  d3_Tree2("a",JSON.parse(JSON.stringify(datas)),
+    function(node) {// 单击节点回调函数
+      console.log(node.name,"###单击",node.group);
+    },
+    function(node,update,links,nodes) {// 双击节点回调函数
+    },
+    function(line) {// 点击线回调函数
+    });
+}
+</script>

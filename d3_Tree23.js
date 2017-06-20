@@ -18,11 +18,7 @@ function d3_Tree2(domId, data, callbackClick, callbackDbClick,callbackLineClick)
     "11": "MAC",
     "12": "护照号",
     "13": "微博号",
-    "14": "公司名称",
-    "15": "服务处所",
-    "16": "父母亲姓名",
-    "17": "子女姓名",
-    "19": "父亲姓名",
+
     "20": "小型汽车",
     "21": "轻便摩托车",
     "22": "普通摩托车",
@@ -33,43 +29,11 @@ function d3_Tree2(domId, data, callbackClick, callbackDbClick,callbackLineClick)
     "27": "跨行政辖区临时移动使用的临时行驶车号牌",
     "28": "临时摩托车",
     "29": "其他车辆",
-    "30": "监护人身份证号",
-    "31": "监护人姓名",
-    "32": "监护人服务处所",
-    "33": "监护人住址详址",
-    "34":"监护人手机号码",
-    "49":"寄件人身份证号",
-    "50":"寄件人姓名",
-    "51":"寄件人手机号码",
-    "52":"收件人身份证号",
-    "53":"收件人姓名",
-    "54":"收件人手机号码",
-    "55":"房东身份证号",
-    "56":"房东姓名",
-    "57":"房东手机号码",
-    "58":"房屋地址",
-    "62":"租客身份证号",
-    "63":"租客姓名",
-    "64":"租客手机号码",
-    "74":"租车人身份证号",
-    "75":"租车人姓名",
-    "76":"租用车牌号",
-    "77":"租车人手机号码",
-    "78":"车主身份证号",
-    "79":"车主姓名",
-    "80":"车主手机号码",
-    "81":"租用车辆识别码",
-    "82":"租用车辆号牌类型",
-    "87":"嫌疑人姓名",
-    "89":"案件名称",
-    "100":"公司联系电话",
-    "104":"公司负责人身份证号",
-    "105":"公司负责人姓名",
-    "106":"公司负责人手机号码",
-    "107":"公司法人身份证号",
-    "108":"公司法人姓名",
-    "109":"公司法人手机号码",
-    "110":"公司详址"
+
+    "30": "父亲",
+    "31": "母亲",
+    "32": "配偶",
+    "33": "子女"
   }
 
   links.forEach(function(link) {
@@ -91,14 +55,35 @@ function d3_Tree2(domId, data, callbackClick, callbackDbClick,callbackLineClick)
   var width = dom.width(),
     height = dom.height();
 
+  var length4 = 0;
+  for (var i1 = 0; i1 < groups.length; i1++) {
+    if(groups[i1].group == 4) {
+        length4 +=1;
+    }
+  };
+
+  // console.log(width/length4);
+  var onewidth = width/length4;
+
+
+  console.log(nodes);
+  for(var i in nodes) {
+      if(Object.prototype.hasOwnProperty.call(nodes,i)) { //过滤
+          nodes[i].y = 200;
+          onewidth += onewidth;
+      }
+  }
+
+  console.log(nodes);
+
   var dragEvent = 0;
 
   var force = d3.layout.force() //layout将json格式转化为力学图可用的格式
     // .nodes(d3.values(nodes))//设定节点数组
     // .links(links)//设定连线数组
     .size([width, height]) //作用域的大小
-    .linkDistance(180) //连接线长度
-    .charge(-1500) //顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
+    // .linkDistance(100) //连接线长度
+    .charge(-2500) //顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
     .on("tick", tick); //指时间间隔，隔一段时间刷新一次画面
   // .start()//开始转换
 var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
@@ -181,7 +166,7 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
         'id': function(d, i) {
           return 'edgepath' + i;
         }
-      })
+      }).attr("d",d3.svg.diagonal())
       .style("stroke", function(d) {
         var lineColor;
         lineColor = "#B43232";
@@ -286,8 +271,37 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
       .attr("height", 56)
       .attr("xlink:href", function(d) {
         var link = links[d.index];
-        if (d.group == 0) return "images/icon-0.png";
-        return "images/icon-"+d.group+".png";
+        if (d.group == 1) return "images/icon-1.png"; // 电话
+        if (d.group == 2) return "images/icon-2.png"; // 车牌号
+        if (d.group == 3) return "images/icon-3.png"; // 微信
+        if (d.group == 4) return "images/icon-4.png"; // QQ
+        if (d.group == 5) return "images/icon-5.png"; // 姓名
+        if (d.group == 6) return "images/icon-6.png"; // 身份证
+
+        if (d.group == 7) return "images/icon-7.png"; // 住址
+        if (d.group == 8) return "images/icon-8.png"; // 邮箱
+        if (d.group == 9) return "images/icon-9.png"; // IMEI
+        if (d.group == 10) return "images/icon-10.png"; // IMSI
+        if (d.group == 11) return "images/icon-11.png"; // MAC
+        if (d.group == 12) return "images/icon-12.png"; // 护照
+        if (d.group == 13) return "images/icon-13.png"; // 微博
+
+        if (d.group == 20) return "images/icon-20.png"; // 小型汽车
+        if (d.group == 21) return "images/icon-21.png"; // 轻便摩托车
+        if (d.group == 22) return "images/icon-22.png"; // 普通摩托车
+        if (d.group == 23) return "images/icon-23.png"; // 大型汽车
+        if (d.group == 24) return "images/icon-24.png"; // 挂车汽车
+        if (d.group == 25) return "images/icon-25.png"; // 警用汽车
+        if (d.group == 26) return "images/icon-26.png"; // 警用摩托车
+        if (d.group == 27) return "images/icon-27.png"; // 跨行政辖区临时移动使用的临时行驶车号牌
+        if (d.group == 28) return "images/icon-28.png"; // 临时摩托车 
+        if (d.group == 29) return "images/icon-29.png"; // 其他车辆
+
+        if (d.group == 30) return "images/icon-30.png"; // 父亲
+        if (d.group == 31) return "images/icon-31.png"; // 母亲
+        if (d.group == 32) return "images/icon-32.png"; // 配偶
+        if (d.group == 33) return "images/icon-33.png"; // 子女
+        return "images/icon-0.png";
       })
       .attr("transform", function(d) {
         return "translate(23,23)";
@@ -416,15 +430,11 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
         });
         callbackClick(node);
       })
-      .on("dblclick", function (node) { //dblclick 
+      .on("dblclick", function(node) { //dblclick 
         edges_text.style("fill", "black");
         edges_text.style("font", "12px Microsoft YaHei");
-        if ([5, 6, 14, 15, 16, 17].indexOf(node.group) !== -1) {
-          _as.jAlert("<p>请选择特征码进行线索挖掘</p>");
-          return;
-        }
-        /*if (node.group == 5) return; // 姓名
-        if (node.group == 7) return; // 住址详址*/
+        if (node.group == 5) return; // 姓名
+        if (node.group == 7) return; // 住址详址
         callbackDbClick(node, update, links, nodes);
       });
 
@@ -434,16 +444,24 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
   function tick() {
     //更新结点图片和文字  
     nodes_img.attr("x", function(d) {
+      // if(d.group == 5) return width/2;
+      // if(d.group == 2) return 200;
+      // if(d.group == 4) return 300;
       return d.x - 100 / 2;
     });
     nodes_img.attr("y", function(d) {
+      if(d.group == 5) return 100;
+      if(d.group == 2) return 200;
+      if(d.group == 4) return 300;
       return d.y - 100 / 2;
     });
 
     text.attr("transform", transform2); //顶点文字
 
     edges_line.attr('d', function(d) {
-      var path = 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+      // var path = 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+      var path = 'M ' + d.source.x + ' ' + 150 + ' L ' + d.target.x + ' ' + 250;
+      if(d.source.group == 2) path = 'M ' + d.source.x + ' ' + 250 + ' L ' + d.target.x + ' ' + 350;
       return path;
     });
 
@@ -471,6 +489,10 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
   }
 
   function transform2(d) {
-    return "translate(" + (d.x) + "," + d.y + ")";
+    // return "translate(" + (d.x) + "," + d.y + ")";
+      var tl = "translate(" + (d.x) + "," + 150 + ")";
+      if(d.group == 2) tl = "translate(" + (d.x) + "," + 250 + ")";
+      if(d.group == 4) tl = "translate(" + (d.x) + "," + 350 + ")";
+      return tl;
   }
 }

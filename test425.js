@@ -243,6 +243,7 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
 
     //设置线条上的文字
     edges_text.append('textPath')
+      .attr("transform","rotate(-20)")
       .attr('xlink:href', function(d, i) {
         return '#edgepath' + i
       })
@@ -336,7 +337,7 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
       .style("font", "12px Microsoft YaHei")
       .style("text-shadow", "0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff")
       .attr("dy", ".35em")
-      .attr("display", "none")
+      // .attr("display", "none")
       .attr("text-anchor", "middle") //在圆圈中加上数据 
       .style("font-weight", "bold")
       .style('fill', function(node) {
@@ -347,46 +348,12 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
         color = "#480b48";
         return color;
       }).attr('x', function(d) {
-        var re_en = /[a-zA-Z]+/g;
-        //如果是全英文，不换行
-        if (d.name.match(re_en)) {
           d3.select(this).append('tspan')
-            .attr('x', 0)
-            .attr('y', 2)
-            .text(function() {
-              return d.name;
-            });
-        }
-        //如果小于四个字符，不换行
-        else if (d.name.length <= 4) {
-          d3.select(this).append('tspan')
-            .attr('x', 0)
-            .attr('y', 2)
-            .text(function() {
-              return d.name;
-            });
-        } else {
-          var top = d.name.substring(0, 4);
-          var bot = d.name.substring(4, d.name.length);
-
-          d3.select(this).text(function() {
-            return '';
+          .attr('x', 0)
+          .attr('y', 2)
+          .text(function() {
+            return d.name;
           });
-
-          d3.select(this).append('tspan')
-            .attr('x', 0)
-            .attr('y', -7)
-            .text(function() {
-              return top;
-            });
-
-          d3.select(this).append('tspan')
-            .attr('x', 0)
-            .attr('y', 10)
-            .text(function() {
-              return bot;
-            });
-        }
       })
       .on("click", function(node) {
         edges_text.style("fill", "black");
@@ -416,15 +383,11 @@ var firstsvg=d3.select("#" + domId).append("svg").attr("width", width)
         });
         callbackClick(node);
       })
-      .on("dblclick", function (node) { //dblclick 
+      .on("dblclick", function(node) { //dblclick 
         edges_text.style("fill", "black");
         edges_text.style("font", "12px Microsoft YaHei");
-        if ([5, 6, 14, 15, 16, 17].indexOf(node.group) !== -1) {
-          _as.jAlert("<p>请选择特征码进行线索挖掘</p>");
-          return;
-        }
-        /*if (node.group == 5) return; // 姓名
-        if (node.group == 7) return; // 住址详址*/
+        if (node.group == 5) return; // 姓名
+        if (node.group == 7) return; // 住址详址
         callbackDbClick(node, update, links, nodes);
       });
 
