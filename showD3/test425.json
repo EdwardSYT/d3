@@ -1,0 +1,18 @@
+{
+  "nodes": [
+    {"name":"124567466/李飞","group":5,"selected":false},
+    {"name":"537487382/赵六","group":5,"selected":false},
+
+    {"name":"111111","group":3,"selected":false},
+    {"name":"222222","group":3,"selected":false},
+    {"name":"333333","group":3,"selected":false}
+  ],
+  "links": [
+    {"source": "124567466/李飞", "target": "111111", "rela":"23"},
+    {"source": "124567466/李飞", "target": "222222", "rela":"14"},
+    {"source": "124567466/李飞", "target": "333333", "rela":"67"},
+    {"source": "537487382/赵六", "target": "111111", "rela":"54"},
+    {"source": "537487382/赵六", "target": "222222", "rela":"11"},
+    {"source": "537487382/赵六", "target": "333333", "rela":"78"}
+  ]
+}

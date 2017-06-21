@@ -10,14 +10,14 @@
 <body>
 <div id="a" style="width:800px;height:600px;float:left;border:solid 1px #a0ffff;"></div>
 <script src="jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="d3/d3.v3.min.js"></script>
-<script type="text/javascript" src="d3_Tree425.js"></script>
+<script src="d3.v3.min.js"></script>
+<script src="d3_Tree425.js"></script>
 <script>
 
 var datas;
 function selectTree() {
   if(typeof datas == "undefined") {
-    $.get("data/test425.json?name=510790198010218790&group=6", function(data) {
+    $.get("test425.json?name=510790198010218790&group=6", function(data) {
       // datas = JSON.parse(data);
       datas = data;
       showTree();
